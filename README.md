@@ -22,12 +22,44 @@ that are **late or stagnant**, plus a **pipeline summary**.
 └── DECISIONS.md
 ```
 
-## Quick start
+## Quick start (Docker - recommended)
 
-> Full setup instructions (single `docker compose up`) are added in a later phase.
+Everything runs in containers. You only need Docker.
 
-1. Copy `.env.example` to `.env` and adjust if needed.
-2. See `backend/` and `frontend/` for app-specific scripts.
+```bash
+# 1. (optional) configure env - sensible defaults are baked in
+cp .env.example .env
+
+# 2. build and start the whole stack (Postgres + backend + frontend)
+docker compose up --build
+```
+
+Services:
+
+| Service  | URL                          |
+| -------- | ---------------------------- |
+| Frontend | http://localhost:3000        |
+| Backend  | http://localhost:3001        |
+| Postgres | localhost:5432               |
+
+Source code is bind-mounted, so both apps hot-reload on file changes.
+
+Stop with `docker compose down` (add `-v` to also drop the database volume).
+
+> Database migrations and seeding run automatically on backend startup
+> (wired in once Prisma is added).
+
+## Local dev (without Docker, optional)
+
+Requires Node.js 22 and a local PostgreSQL reachable via `DATABASE_URL`.
+
+```bash
+# backend
+cd backend && npm install && npm run start:dev
+
+# frontend (in another terminal)
+cd frontend && npm install && npm run dev
+```
 
 ## Documentation
 
