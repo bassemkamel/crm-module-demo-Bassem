@@ -8,6 +8,7 @@ import {
   Param,
   Patch,
   Post,
+  Query,
 } from '@nestjs/common';
 import {
   ApiBadRequestResponse,
@@ -18,10 +19,13 @@ import {
   ApiOperation,
   ApiTags,
 } from '@nestjs/swagger';
+import { Paginated } from '../common/pagination';
 import { CreateOpportunityDto } from './dto/create-opportunity.dto';
+import { QueryOpportunitiesDto } from './dto/query-opportunities.dto';
 import { UpdateOpportunityDto } from './dto/update-opportunity.dto';
 import { OpportunitiesService } from './opportunities.service';
 import { OpportunityResponse } from './opportunity.mapper';
+import { PipelineSummary } from './opportunity.summary';
 
 @ApiTags('opportunities')
 @Controller('opportunities')
@@ -37,10 +41,21 @@ export class OpportunitiesController {
   }
 
   @Get()
-  @ApiOperation({ summary: 'List opportunities (with computed health)' })
-  @ApiOkResponse({ description: 'List of opportunities.' })
-  findAll(): Promise<OpportunityResponse[]> {
-    return this.opportunitiesService.findAll();
+  @ApiOperation({
+    summary: 'List opportunities with filters and server-side pagination',
+  })
+  @ApiOkResponse({ description: 'Paginated list of opportunities.' })
+  findAll(
+    @Query() query: QueryOpportunitiesDto,
+  ): Promise<Paginated<OpportunityResponse>> {
+    return this.opportunitiesService.findAll(query);
+  }
+
+  @Get('pipeline/summary')
+  @ApiOperation({ summary: 'Pipeline summary (aggregated KPIs)' })
+  @ApiOkResponse({ description: 'Aggregated pipeline metrics.' })
+  getPipelineSummary(): Promise<PipelineSummary> {
+    return this.opportunitiesService.getPipelineSummary();
   }
 
   @Get(':id')
