@@ -21,6 +21,6 @@ RUN npx prisma generate
 
 EXPOSE 3001
 
-# Regenerate the Prisma client (the node_modules volume may lag the schema) and
-# apply pending migrations before starting the app. Idempotent on every boot.
-CMD ["sh", "-c", "npx prisma generate && npx prisma migrate deploy && npm run start:dev"]
+# Regenerate the Prisma client (the node_modules volume may lag the schema),
+# apply pending migrations, and seed (idempotent) before starting the app.
+CMD ["sh", "-c", "npx prisma generate && npx prisma migrate deploy && npx prisma db seed && npm run start:dev"]
