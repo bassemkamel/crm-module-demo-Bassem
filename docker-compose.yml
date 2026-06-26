@@ -16,6 +16,24 @@ services:
       timeout: 5s
       retries: 10
 
+  adminer:
+    # Adminer Evo: drop-in Adminer fork that supports defaulting the driver to
+    # PostgreSQL (the official image only pre-fills the host, leaving the System
+    # dropdown on MySQL).
+    image: shyim/adminerevo:latest
+    restart: unless-stopped
+    environment:
+      ADMINER_DEFAULT_DRIVER: pgsql
+      ADMINER_DEFAULT_SERVER: db
+      ADMINER_DEFAULT_USER: ${POSTGRES_USER:-crm}
+      ADMINER_DEFAULT_PASSWORD: ${POSTGRES_PASSWORD:-crm}
+      ADMINER_DEFAULT_DB: ${POSTGRES_DB:-crm}
+    ports:
+      - "${ADMINER_PORT:-81}:8080"
+    depends_on:
+      db:
+        condition: service_healthy
+
   backend:
     build:
       context: ./backend

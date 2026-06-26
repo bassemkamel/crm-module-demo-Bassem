@@ -41,6 +41,11 @@ Services:
 | Frontend | http://localhost:3000        |
 | Backend  | http://localhost:3001        |
 | Postgres | localhost:5432               |
+| Adminer  | http://localhost:81          |
+
+Adminer (DB web UI) opens straight onto PostgreSQL with the login form
+pre-filled from your `.env` (`POSTGRES_USER` / `POSTGRES_PASSWORD` /
+`POSTGRES_DB`, defaults `crm` / `crm` / `crm`) - just click **Login**.
 
 Source code is bind-mounted, so both apps hot-reload on file changes.
 
