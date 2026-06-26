@@ -9,10 +9,18 @@ WORKDIR /app
 RUN apk add --no-cache openssl
 
 COPY package*.json ./
-RUN npm ci
+# npm install (not ci) so platform-specific Prisma engine deps resolve correctly
+# when building the Linux image from a non-Linux host.
+RUN npm install --no-audit --no-fund
 
 COPY . .
 
+# Pre-generate the Prisma client into the image (also regenerated at runtime by
+# the entrypoint to stay in sync with the mounted schema).
+RUN npx prisma generate
+
 EXPOSE 3001
 
-CMD ["npm", "run", "start:dev"]
+# Regenerate the Prisma client (the node_modules volume may lag the schema) and
+# apply pending migrations before starting the app. Idempotent on every boot.
+CMD ["sh", "-c", "npx prisma generate && npx prisma migrate deploy && npm run start:dev"]
