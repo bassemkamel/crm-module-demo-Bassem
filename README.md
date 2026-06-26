@@ -39,9 +39,13 @@ Services:
 | Service  | URL                          |
 | -------- | ---------------------------- |
 | Frontend | http://localhost:3000        |
-| Backend  | http://localhost:3001        |
+| Backend  | http://localhost:3001/api    |
+| API docs | http://localhost:3001/api/docs |
 | Postgres | localhost:5432               |
 | Adminer  | http://localhost:81          |
+
+The backend exposes interactive **Swagger / OpenAPI** docs at
+`http://localhost:3001/api/docs` (raw spec at `/api/docs-json`).
 
 Adminer (DB web UI) opens straight onto PostgreSQL with the login form
 pre-filled from your `.env` (`POSTGRES_USER` / `POSTGRES_PASSWORD` /
