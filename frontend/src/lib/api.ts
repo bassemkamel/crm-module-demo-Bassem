@@ -1,5 +1,6 @@
 import type {
   Client,
+  ClientType,
   Opportunity,
   OpportunityFilters,
   Paginated,
@@ -14,6 +15,22 @@ export interface OpportunityInput {
   expectedCloseDate: string;
   stage: PipelineStage;
   clientId: string;
+}
+
+/**
+ * Payload accepted by the create/update client endpoints. `null` is used to
+ * explicitly clear a field (e.g. when switching between company/individual).
+ */
+export interface ClientInput {
+  type: ClientType;
+  email?: string | null;
+  phone?: string | null;
+  notes?: string | null;
+  companyName?: string | null;
+  registrationNumber?: string | null;
+  industry?: string | null;
+  firstName?: string | null;
+  lastName?: string | null;
 }
 
 // Browser-facing base URL. Falls back to the docker-mapped backend port so the
@@ -92,8 +109,31 @@ export function getPipelineSummary(): Promise<PipelineSummary> {
   return request<PipelineSummary>(`/opportunities/pipeline/summary`);
 }
 
-export function getClients(): Promise<Client[]> {
-  return request<Client[]>(`/clients`);
+export function getClients(type?: ClientType): Promise<Client[]> {
+  const qs = type ? `?type=${type}` : "";
+  return request<Client[]>(`/clients${qs}`);
+}
+
+export function getClient(id: string): Promise<Client> {
+  return request<Client>(`/clients/${id}`);
+}
+
+export function createClient(input: ClientInput): Promise<Client> {
+  return request<Client>(`/clients`, {
+    method: "POST",
+    body: JSON.stringify(input),
+  });
+}
+
+export function updateClient(id: string, input: ClientInput): Promise<Client> {
+  return request<Client>(`/clients/${id}`, {
+    method: "PATCH",
+    body: JSON.stringify(input),
+  });
+}
+
+export function deleteClient(id: string): Promise<void> {
+  return request<void>(`/clients/${id}`, { method: "DELETE" });
 }
 
 export function createOpportunity(

@@ -39,12 +39,18 @@ export default function RootLayout({
                 CRM
               </span>
             </Link>
-            <nav className="text-sm font-medium text-zinc-600">
+            <nav className="flex items-center gap-1 text-sm font-medium text-zinc-600">
               <Link
                 href="/opportunities"
                 className="rounded-md px-3 py-1.5 hover:bg-zinc-100"
               >
                 Opportunities
+              </Link>
+              <Link
+                href="/clients"
+                className="rounded-md px-3 py-1.5 hover:bg-zinc-100"
+              >
+                Clients
               </Link>
             </nav>
           </div>
