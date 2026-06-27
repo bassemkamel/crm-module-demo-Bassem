@@ -1,3 +1,4 @@
+import { BadRequestException, NotFoundException } from '@nestjs/common';
 import { ClientType, PipelineStage } from '@prisma/client';
 import { PrismaService } from '../prisma/prisma.service';
 import { OpportunitiesService } from './opportunities.service';
@@ -37,7 +38,7 @@ function createPrismaMock(): PrismaMock {
 const sampleClient = {
   id: 'client-1',
   type: ClientType.COMPANY,
-  email: null,
+  email: 'contact@acme.example',
   phone: null,
   notes: null,
   companyName: 'Acme',
@@ -146,6 +147,62 @@ describe('OpportunitiesService', () => {
       };
       expect(callArg.data.stageChangedAt).toBeUndefined();
       expect(callArg.data.title).toBe('Renamed');
+    });
+  });
+
+  describe('create', () => {
+    it('throws BadRequestException when the client does not exist', async () => {
+      prisma.client.findUnique.mockResolvedValue(null);
+
+      await expect(
+        service.create({
+          title: 'Deal',
+          amount: 1000,
+          expectedCloseDate: '2026-12-31',
+          clientId: 'missing-client',
+        }),
+      ).rejects.toThrow(BadRequestException);
+      await expect(
+        service.create({
+          title: 'Deal',
+          amount: 1000,
+          expectedCloseDate: '2026-12-31',
+          clientId: 'missing-client',
+        }),
+      ).rejects.toMatchObject({
+        status: 400,
+        message: 'Client missing-client does not exist',
+      });
+    });
+  });
+
+  describe('findOne', () => {
+    it('throws NotFoundException when the opportunity is missing', async () => {
+      prisma.opportunity.findUnique.mockResolvedValue(null);
+
+      await expect(service.findOne('missing')).rejects.toThrow(
+        NotFoundException,
+      );
+    });
+  });
+
+  describe('update', () => {
+    it('throws NotFoundException when the opportunity is missing', async () => {
+      prisma.opportunity.findUnique.mockResolvedValue(null);
+
+      await expect(
+        service.update('missing', { title: 'Renamed' }),
+      ).rejects.toThrow(NotFoundException);
+    });
+  });
+
+  describe('remove', () => {
+    it('throws NotFoundException when the opportunity is missing', async () => {
+      prisma.opportunity.findUnique.mockResolvedValue(null);
+
+      await expect(service.remove('missing')).rejects.toThrow(
+        NotFoundException,
+      );
     });
   });
 });

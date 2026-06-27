@@ -109,10 +109,81 @@ npm run start:dev
 
 # frontend (in another terminal)
 cd frontend && npm install && npm run dev
-
-# backend unit tests
-cd backend && npm test
 ```
+
+## Tests
+
+The backend has **unit tests** (business logic, services, error mapping) and **e2e tests**
+(HTTP status codes end-to-end against a real PostgreSQL database). The frontend has no
+automated tests yet.
+
+### Prerequisites
+
+| Test type | Database required? |
+| --------- | ------------------ |
+| Unit      | No                 |
+| E2E       | Yes — PostgreSQL reachable via `DATABASE_URL` |
+
+With Docker running (`docker compose up`), point `DATABASE_URL` at the local Postgres
+instance (see `.env.example`). E2E tests seed the admin user if needed and create their
+own temporary records.
+
+### Commands (backend)
+
+Run these from the `backend/` directory:
+
+```bash
+# Unit tests (33 tests)
+npm test
+
+# Unit tests in watch mode
+npm run test:watch
+
+# Unit tests with coverage report (statements ~42 %)
+npm run test:cov
+
+# End-to-end tests — all HTTP status codes (26 tests)
+npm run test:e2e
+```
+
+Coverage output is written to `backend/coverage/` (open `coverage/lcov-report/index.html`
+in a browser for the detailed report).
+
+Run everything in one go:
+
+```bash
+cd backend
+npm test && npm run test:e2e
+```
+
+### What is covered
+
+**Unit tests** (`src/**/*.spec.ts`):
+
+| Area | Examples |
+| ---- | -------- |
+| Opportunity health | `OK`, `LATE`, `STAGNANT`, boundary days, terminal stages |
+| Pipeline aggregation | open / weighted / won / lost / problematic KPIs |
+| Services | `NotFoundException` (404), `BadRequestException` (400), `UnauthorizedException` (401) |
+| Global error filter | Prisma P2025→404, P2002→409, P2003→400, unknown→500 |
+
+**E2E tests** (`test/*.e2e-spec.ts`):
+
+| Status | Scenarios |
+| ------ | --------- |
+| **200** | login, `/auth/me`, list & detail clients/opportunities, pipeline summary |
+| **201** | create client, create opportunity |
+| **204** | delete client, delete opportunity |
+| **400** | validation errors, unknown fields, missing client for opportunity |
+| **401** | missing/invalid JWT, wrong password |
+| **404** | client or opportunity not found (GET / PATCH / DELETE) |
+
+Status **409** (unique constraint) and **500** (unexpected error) are covered by the
+`AllExceptionsFilter` unit tests — no API endpoint currently returns them in normal use.
+
+> E2E tests boot the app with the same global config as production (`/api` prefix,
+> `ValidationPipe`, `AllExceptionsFilter`) but are **not** included in the Jest coverage
+> report from `npm run test:cov`.
 
 ## Documentation
 
