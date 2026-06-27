@@ -24,9 +24,8 @@ const schema = z
     email: z
       .string()
       .trim()
-      .email("Invalid email")
-      .optional()
-      .or(z.literal("")),
+      .min(1, "Email is required")
+      .email("Invalid email"),
     phone: optionalText,
     notes: optionalText,
     companyName: optionalText,

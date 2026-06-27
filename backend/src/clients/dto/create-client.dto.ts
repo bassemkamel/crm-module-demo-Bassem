@@ -18,9 +18,8 @@ export class CreateClientDto {
   type!: ClientType;
 
   // Shared contact fields
-  @IsOptional()
   @IsEmail()
-  email?: string;
+  email!: string;
 
   @IsOptional()
   @IsString()

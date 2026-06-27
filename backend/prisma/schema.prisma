@@ -49,7 +49,7 @@ model Client {
   type ClientType
 
   // Shared contact fields
-  email String?
+  email String
   phone String?
   notes String?
 

@@ -28,7 +28,7 @@ export type OpportunityHealth =
 export interface Client {
   id: string;
   type: ClientType;
-  email: string | null;
+  email: string;
   phone: string | null;
   notes: string | null;
   companyName: string | null;
