@@ -3,7 +3,7 @@ import { OpportunitiesDashboard } from "./OpportunitiesDashboard";
 import { Spinner } from "@/components/states";
 
 export const metadata = {
-  title: "Opportunities · CRM",
+  title: "Opportunités · CRM",
 };
 
 export default function OpportunitiesPage() {

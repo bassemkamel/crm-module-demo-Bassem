@@ -43,11 +43,13 @@ export function EditClient({ id }: { id: string }) {
         href="/clients"
         className="inline-flex items-center gap-1 text-sm font-medium text-zinc-500 hover:text-zinc-800"
       >
-        <span aria-hidden>&larr;</span> Back to clients
+        <span aria-hidden>&larr;</span> Retour aux clients
       </Link>
-      <h1 className="text-2xl font-semibold text-zinc-900">Edit client</h1>
+      <h1 className="text-2xl font-semibold text-zinc-900">
+        Modifier le client
+      </h1>
 
-      {state.status === "loading" && <Spinner label="Loading client…" />}
+      {state.status === "loading" && <Spinner label="Chargement du client…" />}
       {state.status === "error" && (
         <ErrorState
           message={state.error}
@@ -55,7 +57,7 @@ export function EditClient({ id }: { id: string }) {
         />
       )}
       {state.status === "notfound" && (
-        <p className="text-sm text-zinc-500">This client no longer exists.</p>
+        <p className="text-sm text-zinc-500">Ce client n'existe plus.</p>
       )}
       {state.status === "success" && (
         <ClientForm mode="edit" client={state.data} />
@@ -67,5 +69,5 @@ export function EditClient({ id }: { id: string }) {
 function toMessage(err: unknown): string {
   if (err instanceof ApiError) return err.message;
   if (err instanceof Error) return err.message;
-  return "Unexpected error";
+  return "Erreur inattendue";
 }

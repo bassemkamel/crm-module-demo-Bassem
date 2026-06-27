@@ -1,7 +1,7 @@
 import { EditOpportunity } from "./EditOpportunity";
 
 export const metadata = {
-  title: "Edit opportunity · CRM",
+  title: "Modifier l'opportunité · CRM",
 };
 
 export default async function EditOpportunityPage({

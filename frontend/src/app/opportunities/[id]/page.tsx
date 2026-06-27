@@ -1,7 +1,7 @@
 import { OpportunityDetail } from "./OpportunityDetail";
 
 export const metadata = {
-  title: "Opportunity · CRM",
+  title: "Opportunité · CRM",
 };
 
 export default async function OpportunityDetailPage({

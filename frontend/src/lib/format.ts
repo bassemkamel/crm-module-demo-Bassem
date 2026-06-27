@@ -5,7 +5,7 @@ import {
   type StageBreakdown,
 } from "./types";
 
-const currencyFormatter = new Intl.NumberFormat("en-US", {
+const currencyFormatter = new Intl.NumberFormat("fr-FR", {
   style: "currency",
   currency: "EUR",
   maximumFractionDigits: 0,
@@ -16,7 +16,7 @@ export function formatCurrency(value: number): string {
 }
 
 export function formatDate(iso: string): string {
-  return new Date(iso).toLocaleDateString("en-GB", {
+  return new Date(iso).toLocaleDateString("fr-FR", {
     day: "2-digit",
     month: "short",
     year: "numeric",
@@ -24,12 +24,12 @@ export function formatDate(iso: string): string {
 }
 
 export const STAGE_LABELS: Record<PipelineStage, string> = {
-  NEW: "New",
-  QUALIFIED: "Qualified",
-  PROPOSAL: "Proposal",
-  NEGOTIATION: "Negotiation",
-  WON: "Won",
-  LOST: "Lost",
+  NEW: "Nouveau",
+  QUALIFIED: "Qualifié",
+  PROPOSAL: "Proposition",
+  NEGOTIATION: "Négociation",
+  WON: "Gagné",
+  LOST: "Perdu",
 };
 
 // Stable order for displaying stages (pipeline flow, terminal stages last).
@@ -49,14 +49,14 @@ export function sortByStageOrder(breakdown: StageBreakdown[]): StageBreakdown[] 
 }
 
 export const CLIENT_TYPE_LABELS: Record<ClientType, string> = {
-  COMPANY: "Company",
-  INDIVIDUAL: "Individual",
+  COMPANY: "Entreprise",
+  INDIVIDUAL: "Particulier",
 };
 
 export const HEALTH_LABELS: Record<OpportunityHealth, string> = {
-  OK: "On track",
-  LATE: "Late",
-  STAGNANT: "Stagnant",
+  OK: "Dans les temps",
+  LATE: "En retard",
+  STAGNANT: "Stagnante",
 };
 
 // Tailwind classes per health state for the status badge.

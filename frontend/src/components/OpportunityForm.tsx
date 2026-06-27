@@ -19,16 +19,16 @@ import { type Client, type Opportunity, PipelineStage } from "@/lib/types";
 import { ErrorState } from "@/components/states";
 
 const schema = z.object({
-  title: z.string().trim().min(1, "Title is required"),
+  title: z.string().trim().min(1, "Le titre est requis"),
   // Kept as a string so we can validate the decimal precision the API expects.
   amount: z
     .string()
     .trim()
-    .regex(/^\d+(\.\d{1,2})?$/, "Enter a valid amount (max 2 decimals)")
-    .refine((v) => parseFloat(v) > 0, "Amount must be greater than 0"),
-  expectedCloseDate: z.string().min(1, "Expected close date is required"),
+    .regex(/^\d+(\.\d{1,2})?$/, "Saisissez un montant valide (2 décimales max)")
+    .refine((v) => parseFloat(v) > 0, "Le montant doit être supérieur à 0"),
+  expectedCloseDate: z.string().min(1, "La date de signature est requise"),
   stage: z.nativeEnum(PipelineStage),
-  clientId: z.string().min(1, "Select a client"),
+  clientId: z.string().min(1, "Sélectionnez un client"),
 });
 
 type FormValues = z.infer<typeof schema>;
@@ -111,7 +111,11 @@ export function OpportunityForm({ mode, opportunity }: Props) {
 
   const onDelete = async () => {
     if (!opportunity) return;
-    if (!window.confirm("Delete this opportunity? This cannot be undone.")) {
+    if (
+      !window.confirm(
+        "Supprimer cette opportunité ? Cette action est irréversible.",
+      )
+    ) {
       return;
     }
     setServerError(null);
@@ -138,16 +142,16 @@ export function OpportunityForm({ mode, opportunity }: Props) {
     >
       {serverError && <ErrorState message={serverError} />}
 
-      <Field label="Title" error={errors.title?.message}>
+      <Field label="Titre" error={errors.title?.message}>
         <input
           type="text"
           className={inputClass}
-          placeholder="e.g. Annual platform license"
+          placeholder="ex. Licence annuelle plateforme"
           {...register("title")}
         />
       </Field>
 
-      <Field label="Amount (EUR)" error={errors.amount?.message}>
+      <Field label="Montant (EUR)" error={errors.amount?.message}>
         <input
           type="number"
           step="0.01"
@@ -159,7 +163,7 @@ export function OpportunityForm({ mode, opportunity }: Props) {
       </Field>
 
       <Field
-        label="Expected close date"
+        label="Date de signature prévue"
         error={errors.expectedCloseDate?.message}
       >
         <input
@@ -169,7 +173,7 @@ export function OpportunityForm({ mode, opportunity }: Props) {
         />
       </Field>
 
-      <Field label="Stage" error={errors.stage?.message}>
+      <Field label="Étape" error={errors.stage?.message}>
         <select className={inputClass} {...register("stage")}>
           {STAGE_ORDER.map((stage) => (
             <option key={stage} value={stage}>
@@ -182,7 +186,7 @@ export function OpportunityForm({ mode, opportunity }: Props) {
       <Field label="Client" error={errors.clientId?.message}>
         {clientsError ? (
           <p className="text-sm text-red-600">
-            Couldn&apos;t load clients: {clientsError}
+            Impossible de charger les clients : {clientsError}
           </p>
         ) : (
           <select
@@ -191,7 +195,7 @@ export function OpportunityForm({ mode, opportunity }: Props) {
             {...register("clientId")}
           >
             <option value="">
-              {clients ? "Select a client…" : "Loading clients…"}
+              {clients ? "Sélectionnez un client…" : "Chargement des clients…"}
             </option>
             {clients?.map((c) => (
               <option key={c.id} value={c.id}>
@@ -210,16 +214,16 @@ export function OpportunityForm({ mode, opportunity }: Props) {
             className="rounded-md bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm transition-colors hover:bg-indigo-700 disabled:cursor-not-allowed disabled:opacity-50"
           >
             {isSubmitting
-              ? "Saving…"
+              ? "Enregistrement…"
               : mode === "create"
-                ? "Create opportunity"
-                : "Save changes"}
+                ? "Créer l'opportunité"
+                : "Enregistrer"}
           </button>
           <Link
             href={cancelHref}
             className="text-sm font-medium text-zinc-500 hover:text-zinc-800"
           >
-            Cancel
+            Annuler
           </Link>
         </div>
 
@@ -230,7 +234,7 @@ export function OpportunityForm({ mode, opportunity }: Props) {
             disabled={isSubmitting || deleting}
             className="text-sm font-medium text-red-600 hover:text-red-700 disabled:opacity-50"
           >
-            {deleting ? "Deleting…" : "Delete"}
+            {deleting ? "Suppression…" : "Supprimer"}
           </button>
         )}
       </div>
@@ -259,5 +263,5 @@ function Field({
 function toMessage(err: unknown): string {
   if (err instanceof ApiError) return err.message;
   if (err instanceof Error) return err.message;
-  return "Unexpected error";
+  return "Erreur inattendue";
 }

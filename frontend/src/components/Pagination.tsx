@@ -20,8 +20,8 @@ export function Pagination({
     <div className="flex items-center justify-between gap-3">
       <p className="text-sm text-zinc-500">
         {total === 0
-          ? "No results"
-          : `Showing ${from}–${to} of ${total}`}
+          ? "Aucun résultat"
+          : `Affichage de ${from}–${to} sur ${total}`}
       </p>
       <div className="flex items-center gap-2">
         <button
@@ -30,10 +30,10 @@ export function Pagination({
           onClick={() => onPageChange(page - 1)}
           disabled={page <= 1}
         >
-          Previous
+          Précédent
         </button>
         <span className="text-sm tabular-nums text-zinc-600">
-          Page {page} of {Math.max(1, totalPages)}
+          Page {page} sur {Math.max(1, totalPages)}
         </span>
         <button
           type="button"
@@ -41,7 +41,7 @@ export function Pagination({
           onClick={() => onPageChange(page + 1)}
           disabled={page >= totalPages}
         >
-          Next
+          Suivant
         </button>
       </div>
     </div>

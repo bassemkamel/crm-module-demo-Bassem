@@ -121,7 +121,9 @@ export function OpportunitiesDashboard() {
     <div className="space-y-8">
       <section>
         <h2 className="mb-3 text-lg font-semibold text-zinc-800">Pipeline</h2>
-        {summary.status === "loading" && <Spinner label="Loading summary…" />}
+        {summary.status === "loading" && (
+          <Spinner label="Chargement du récap…" />
+        )}
         {summary.status === "error" && (
           <ErrorState message={summary.error} onRetry={reload} />
         )}
@@ -134,13 +136,13 @@ export function OpportunitiesDashboard() {
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div className="flex items-center gap-3">
             <h2 className="text-lg font-semibold text-zinc-800">
-              Opportunities
+              Opportunités
             </h2>
             <Link
               href="/opportunities/new"
               className="rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-medium text-white shadow-sm transition-colors hover:bg-indigo-700"
             >
-              + New
+              + Nouvelle
             </Link>
           </div>
           <OpportunityFilters
@@ -156,7 +158,7 @@ export function OpportunitiesDashboard() {
         )}
         {list.status === "success" &&
           (list.data.data.length === 0 ? (
-            <EmptyState message="No opportunities match the current filters." />
+            <EmptyState message="Aucune opportunité ne correspond aux filtres." />
           ) : (
             <>
               <OpportunitiesTable opportunities={list.data.data} />
@@ -171,5 +173,5 @@ export function OpportunitiesDashboard() {
 function toMessage(err: unknown): string {
   if (err instanceof ApiError) return err.message;
   if (err instanceof Error) return err.message;
-  return "Unexpected error";
+  return "Erreur inattendue";
 }

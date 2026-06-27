@@ -5,7 +5,7 @@ export function Spinner({ label }: { label?: string }) {
         className="h-5 w-5 animate-spin rounded-full border-2 border-zinc-300 border-t-zinc-600"
         aria-hidden
       />
-      {label ?? "Loading…"}
+      {label ?? "Chargement…"}
     </div>
   );
 }
@@ -19,7 +19,9 @@ export function ErrorState({
 }) {
   return (
     <div className="rounded-lg border border-red-200 bg-red-50 px-4 py-6 text-center">
-      <p className="text-sm font-medium text-red-800">Something went wrong</p>
+      <p className="text-sm font-medium text-red-800">
+        Une erreur est survenue
+      </p>
       <p className="mt-1 text-sm text-red-600">{message}</p>
       {onRetry && (
         <button
@@ -27,7 +29,7 @@ export function ErrorState({
           onClick={onRetry}
           className="mt-3 rounded-md bg-red-600 px-3 py-1.5 text-sm font-medium text-white transition-colors hover:bg-red-700"
         >
-          Try again
+          Réessayer
         </button>
       )}
     </div>

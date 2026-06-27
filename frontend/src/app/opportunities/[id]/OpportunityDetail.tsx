@@ -49,10 +49,12 @@ export function OpportunityDetail({ id }: { id: string }) {
         href="/opportunities"
         className="inline-flex items-center gap-1 text-sm font-medium text-zinc-500 hover:text-zinc-800"
       >
-        <span aria-hidden>&larr;</span> Back to opportunities
+        <span aria-hidden>&larr;</span> Retour aux opportunités
       </Link>
 
-      {state.status === "loading" && <Spinner label="Loading opportunity…" />}
+      {state.status === "loading" && (
+        <Spinner label="Chargement de l'opportunité…" />
+      )}
       {state.status === "error" && (
         <ErrorState
           message={state.error}
@@ -68,11 +70,13 @@ export function OpportunityDetail({ id }: { id: string }) {
 function NotFound() {
   return (
     <div className="rounded-lg border border-dashed border-zinc-300 px-4 py-12 text-center">
-      <p className="text-sm font-medium text-zinc-700">Opportunity not found</p>
+      <p className="text-sm font-medium text-zinc-700">
+        Opportunité introuvable
+      </p>
       <p className="mt-1 text-sm text-zinc-500">
-        It may have been deleted.{" "}
+        Elle a peut-être été supprimée.{" "}
         <Link href="/opportunities" className="text-indigo-700 hover:underline">
-          Go back to the list
+          Revenir à la liste
         </Link>
       </p>
     </div>
@@ -88,7 +92,7 @@ function Detail({ opportunity }: { opportunity: Opportunity }) {
             {opportunity.title}
           </h1>
           <p className="mt-1 text-sm text-zinc-500">
-            For{" "}
+            Pour{" "}
             <span className="font-medium text-zinc-700">
               {opportunity.client.displayName}
             </span>
@@ -101,7 +105,7 @@ function Detail({ opportunity }: { opportunity: Opportunity }) {
             href={`/opportunities/${opportunity.id}/edit`}
             className="rounded-md border border-zinc-300 bg-white px-3 py-1.5 text-sm font-medium text-zinc-700 shadow-sm transition-colors hover:bg-zinc-50"
           >
-            Edit
+            Modifier
           </Link>
         </div>
       </header>
@@ -111,18 +115,21 @@ function Detail({ opportunity }: { opportunity: Opportunity }) {
       )}
 
       <div className="grid gap-6 md:grid-cols-2">
-        <Card title="Opportunity">
-          <Field label="Amount" value={formatCurrency(opportunity.amount)} />
+        <Card title="Opportunité">
+          <Field label="Montant" value={formatCurrency(opportunity.amount)} />
           <Field
-            label="Expected close date"
+            label="Date de signature prévue"
             value={formatDate(opportunity.expectedCloseDate)}
           />
           <Field
-            label="Last stage change"
+            label="Dernier changement d'étape"
             value={formatDate(opportunity.stageChangedAt)}
           />
-          <Field label="Created" value={formatDate(opportunity.createdAt)} />
-          <Field label="Updated" value={formatDate(opportunity.updatedAt)} />
+          <Field label="Créée le" value={formatDate(opportunity.createdAt)} />
+          <Field
+            label="Mise à jour le"
+            value={formatDate(opportunity.updatedAt)}
+          />
         </Card>
 
         <ClientCard client={opportunity.client} />
@@ -134,12 +141,12 @@ function Detail({ opportunity }: { opportunity: Opportunity }) {
 function ProblematicBanner({ health }: { health: OpportunityHealth }) {
   const reason =
     health === OpportunityHealth.LATE
-      ? "The expected close date has passed and the deal isn't closed."
-      : "This deal hasn't changed stage for a while and may be stalling.";
+      ? "La date de signature prévue est dépassée et l'affaire n'est pas close."
+      : "Cette affaire n'a pas changé d'étape depuis un moment et risque de stagner.";
   return (
     <div className="rounded-lg border border-amber-200 bg-amber-50 px-4 py-3">
       <p className="text-sm font-medium text-amber-800">
-        {HEALTH_LABELS[health]} — needs attention
+        {HEALTH_LABELS[health]} — à traiter
       </p>
       <p className="mt-0.5 text-sm text-amber-700">{reason}</p>
     </div>
@@ -149,21 +156,21 @@ function ProblematicBanner({ health }: { health: OpportunityHealth }) {
 function ClientCard({ client }: { client: Opportunity["client"] }) {
   return (
     <Card title="Client">
-      <Field label="Name" value={client.displayName} />
+      <Field label="Nom" value={client.displayName} />
       <Field label="Type" value={CLIENT_TYPE_LABELS[client.type]} />
       {client.type === ClientType.COMPANY ? (
         <>
-          <Field label="Registration no." value={client.registrationNumber} />
-          <Field label="Industry" value={client.industry} />
+          <Field label="N° d'immatriculation" value={client.registrationNumber} />
+          <Field label="Secteur" value={client.industry} />
         </>
       ) : (
         <>
-          <Field label="First name" value={client.firstName} />
-          <Field label="Last name" value={client.lastName} />
+          <Field label="Prénom" value={client.firstName} />
+          <Field label="Nom" value={client.lastName} />
         </>
       )}
-      <Field label="Email" value={client.email} />
-      <Field label="Phone" value={client.phone} />
+      <Field label="E-mail" value={client.email} />
+      <Field label="Téléphone" value={client.phone} />
       <Field label="Notes" value={client.notes} />
     </Card>
   );
@@ -200,5 +207,5 @@ function Field({ label, value }: { label: string; value: string | null }) {
 function toMessage(err: unknown): string {
   if (err instanceof ApiError) return err.message;
   if (err instanceof Error) return err.message;
-  return "Unexpected error";
+  return "Erreur inattendue";
 }

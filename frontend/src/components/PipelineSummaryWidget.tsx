@@ -47,31 +47,31 @@ export function PipelineSummaryWidget({
     <section className="space-y-4">
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
         <Kpi
-          label="Open pipeline"
+          label="Pipeline ouvert"
           value={formatCurrency(summary.totalOpenValue)}
-          hint={`${summary.totalCount} opportunities total`}
+          hint={`${summary.totalCount} opportunités au total`}
         />
         <Kpi
-          label="Weighted value"
+          label="Valeur pondérée"
           value={formatCurrency(summary.weightedOpenValue)}
-          hint="By stage win probability"
+          hint="Selon la probabilité de gain par étape"
         />
         <Kpi
-          label="Won"
+          label="Gagné"
           value={formatCurrency(summary.wonValue)}
-          hint={`Lost: ${formatCurrency(summary.lostValue)}`}
+          hint={`Perdu : ${formatCurrency(summary.lostValue)}`}
         />
         <Kpi
-          label="Problematic"
+          label="À problème"
           value={String(summary.problematic.count)}
-          hint={formatCurrency(summary.problematic.value) + " at risk"}
+          hint={formatCurrency(summary.problematic.value) + " à risque"}
           tone="warning"
         />
       </div>
 
       <div className="rounded-xl border border-zinc-200 bg-white p-4">
         <h3 className="mb-3 text-sm font-semibold text-zinc-700">
-          Value by stage
+          Valeur par étape
         </h3>
         <ul className="space-y-2">
           {stages.map((s) => (

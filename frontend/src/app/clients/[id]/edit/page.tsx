@@ -1,7 +1,7 @@
 import { EditClient } from "./EditClient";
 
 export const metadata = {
-  title: "Edit client · CRM",
+  title: "Modifier le client · CRM",
 };
 
 export default async function EditClientPage({

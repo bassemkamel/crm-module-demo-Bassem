@@ -9,8 +9,8 @@ import { ApiError } from "@/lib/api";
 import { useAuth } from "@/lib/auth";
 
 const schema = z.object({
-  email: z.string().trim().email("Enter a valid email"),
-  password: z.string().min(1, "Password is required"),
+  email: z.string().trim().email("Saisissez un e-mail valide"),
+  password: z.string().min(1, "Le mot de passe est requis"),
 });
 
 type FormValues = z.infer<typeof schema>;
@@ -39,7 +39,7 @@ export default function LoginPage() {
       router.replace("/");
     } catch (err) {
       setServerError(
-        err instanceof ApiError ? err.message : "Unable to sign in",
+        err instanceof ApiError ? err.message : "Connexion impossible",
       );
     }
   };
@@ -60,9 +60,9 @@ export default function LoginPage() {
           noValidate
         >
           <div>
-            <h1 className="text-lg font-semibold text-zinc-900">Sign in</h1>
+            <h1 className="text-lg font-semibold text-zinc-900">Connexion</h1>
             <p className="mt-1 text-sm text-zinc-500">
-              Use your CRM account to continue.
+              Connectez-vous avec votre compte CRM.
             </p>
           </div>
 
@@ -74,7 +74,7 @@ export default function LoginPage() {
 
           <div className="space-y-1">
             <label className="block text-sm font-medium text-zinc-700">
-              Email
+              E-mail
             </label>
             <input
               type="email"
@@ -90,7 +90,7 @@ export default function LoginPage() {
 
           <div className="space-y-1">
             <label className="block text-sm font-medium text-zinc-700">
-              Password
+              Mot de passe
             </label>
             <input
               type="password"
@@ -109,7 +109,7 @@ export default function LoginPage() {
             disabled={isSubmitting}
             className="w-full rounded-md bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm transition-colors hover:bg-indigo-700 disabled:cursor-not-allowed disabled:opacity-50"
           >
-            {isSubmitting ? "Signing in…" : "Sign in"}
+            {isSubmitting ? "Connexion…" : "Se connecter"}
           </button>
         </form>
       </div>

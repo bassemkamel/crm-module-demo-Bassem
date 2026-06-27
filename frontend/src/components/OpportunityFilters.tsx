@@ -25,7 +25,7 @@ export function OpportunityFilters({ filters, onChange, onReset }: Props) {
   return (
     <div className="flex flex-wrap items-center gap-3">
       <label className="flex items-center gap-2 text-sm text-zinc-600">
-        Stage
+        Étape
         <select
           className={selectClass}
           value={filters.stage ?? ""}
@@ -33,7 +33,7 @@ export function OpportunityFilters({ filters, onChange, onReset }: Props) {
             onChange({ stage: (e.target.value || undefined) as PipelineStage })
           }
         >
-          <option value="">All</option>
+          <option value="">Toutes</option>
           {STAGE_ORDER.map((stage) => (
             <option key={stage} value={stage}>
               {STAGE_LABELS[stage]}
@@ -53,7 +53,7 @@ export function OpportunityFilters({ filters, onChange, onReset }: Props) {
             })
           }
         >
-          <option value="">All</option>
+          <option value="">Tous</option>
           {Object.values(ClientType).map((type) => (
             <option key={type} value={type}>
               {CLIENT_TYPE_LABELS[type]}
@@ -71,7 +71,7 @@ export function OpportunityFilters({ filters, onChange, onReset }: Props) {
             onChange({ problematic: e.target.checked || undefined })
           }
         />
-        Problematic only
+        À problème uniquement
       </label>
 
       {hasActiveFilters && (
@@ -80,7 +80,7 @@ export function OpportunityFilters({ filters, onChange, onReset }: Props) {
           onClick={onReset}
           className="text-sm font-medium text-zinc-500 underline-offset-2 hover:text-zinc-800 hover:underline"
         >
-          Clear filters
+          Réinitialiser les filtres
         </button>
       )}
     </div>

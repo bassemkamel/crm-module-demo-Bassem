@@ -80,7 +80,7 @@ async function request<T>(path: string, init?: RequestInit): Promise<T> {
       cache: "no-store",
     });
   } catch {
-    throw new ApiError(0, "Unable to reach the server. Is the API running?");
+    throw new ApiError(0, "Impossible de joindre le serveur. L'API est-elle démarrée ?");
   }
 
   if (res.status === 401) {
@@ -110,7 +110,7 @@ async function extractErrorMessage(res: Response): Promise<string> {
   } catch {
     // fall through to status text
   }
-  return res.statusText || `Request failed (${res.status})`;
+  return res.statusText || `Échec de la requête (${res.status})`;
 }
 
 function buildQuery(filters: OpportunityFilters): string {

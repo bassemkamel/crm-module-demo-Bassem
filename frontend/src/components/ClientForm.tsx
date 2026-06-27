@@ -24,8 +24,8 @@ const schema = z
     email: z
       .string()
       .trim()
-      .min(1, "Email is required")
-      .email("Invalid email"),
+      .min(1, "L'e-mail est requis")
+      .email("E-mail invalide"),
     phone: optionalText,
     notes: optionalText,
     companyName: optionalText,
@@ -40,7 +40,7 @@ const schema = z
         ctx.addIssue({
           path: ["companyName"],
           code: z.ZodIssueCode.custom,
-          message: "Company name is required",
+          message: "La raison sociale est requise",
         });
       }
     } else {
@@ -48,14 +48,14 @@ const schema = z
         ctx.addIssue({
           path: ["firstName"],
           code: z.ZodIssueCode.custom,
-          message: "First name is required",
+          message: "Le prénom est requis",
         });
       }
       if (!val.lastName?.trim()) {
         ctx.addIssue({
           path: ["lastName"],
           code: z.ZodIssueCode.custom,
-          message: "Last name is required",
+          message: "Le nom est requis",
         });
       }
     }
@@ -162,7 +162,7 @@ export function ClientForm({ mode, client }: Props) {
     if (!client) return;
     if (
       !window.confirm(
-        "Delete this client and all of their opportunities? This cannot be undone.",
+        "Supprimer ce client et toutes ses opportunités ? Cette action est irréversible.",
       )
     ) {
       return;
@@ -187,25 +187,25 @@ export function ClientForm({ mode, client }: Props) {
     >
       {serverError && <ErrorState message={serverError} />}
 
-      <Field label="Client type" error={errors.type?.message}>
+      <Field label="Type de client" error={errors.type?.message}>
         <select className={inputClass} {...register("type")}>
-          <option value={ClientType.COMPANY}>Company</option>
-          <option value={ClientType.INDIVIDUAL}>Individual</option>
+          <option value={ClientType.COMPANY}>Entreprise</option>
+          <option value={ClientType.INDIVIDUAL}>Particulier</option>
         </select>
       </Field>
 
       {type === ClientType.COMPANY ? (
         <>
-          <Field label="Company name" error={errors.companyName?.message}>
+          <Field label="Raison sociale" error={errors.companyName?.message}>
             <input
               type="text"
               className={inputClass}
-              placeholder="e.g. Acme Corporation"
+              placeholder="ex. Acme SARL"
               {...register("companyName")}
             />
           </Field>
           <Field
-            label="Registration number"
+            label="N° d'immatriculation"
             error={errors.registrationNumber?.message}
           >
             <input
@@ -214,7 +214,7 @@ export function ClientForm({ mode, client }: Props) {
               {...register("registrationNumber")}
             />
           </Field>
-          <Field label="Industry" error={errors.industry?.message}>
+          <Field label="Secteur" error={errors.industry?.message}>
             <input
               type="text"
               className={inputClass}
@@ -224,14 +224,14 @@ export function ClientForm({ mode, client }: Props) {
         </>
       ) : (
         <>
-          <Field label="First name" error={errors.firstName?.message}>
+          <Field label="Prénom" error={errors.firstName?.message}>
             <input
               type="text"
               className={inputClass}
               {...register("firstName")}
             />
           </Field>
-          <Field label="Last name" error={errors.lastName?.message}>
+          <Field label="Nom" error={errors.lastName?.message}>
             <input
               type="text"
               className={inputClass}
@@ -241,16 +241,16 @@ export function ClientForm({ mode, client }: Props) {
         </>
       )}
 
-      <Field label="Email" error={errors.email?.message}>
+      <Field label="E-mail" error={errors.email?.message}>
         <input
           type="email"
           className={inputClass}
-          placeholder="name@example.com"
+          placeholder="nom@exemple.com"
           {...register("email")}
         />
       </Field>
 
-      <Field label="Phone" error={errors.phone?.message}>
+      <Field label="Téléphone" error={errors.phone?.message}>
         <input type="text" className={inputClass} {...register("phone")} />
       </Field>
 
@@ -266,16 +266,16 @@ export function ClientForm({ mode, client }: Props) {
             className="rounded-md bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm transition-colors hover:bg-indigo-700 disabled:cursor-not-allowed disabled:opacity-50"
           >
             {isSubmitting
-              ? "Saving…"
+              ? "Enregistrement…"
               : mode === "create"
-                ? "Create client"
-                : "Save changes"}
+                ? "Créer le client"
+                : "Enregistrer"}
           </button>
           <Link
             href="/clients"
             className="text-sm font-medium text-zinc-500 hover:text-zinc-800"
           >
-            Cancel
+            Annuler
           </Link>
         </div>
 
@@ -286,7 +286,7 @@ export function ClientForm({ mode, client }: Props) {
             disabled={isSubmitting || deleting}
             className="text-sm font-medium text-red-600 hover:text-red-700 disabled:opacity-50"
           >
-            {deleting ? "Deleting…" : "Delete"}
+            {deleting ? "Suppression…" : "Supprimer"}
           </button>
         )}
       </div>
@@ -315,5 +315,5 @@ function Field({
 function toMessage(err: unknown): string {
   if (err instanceof ApiError) return err.message;
   if (err instanceof Error) return err.message;
-  return "Unexpected error";
+  return "Erreur inattendue";
 }

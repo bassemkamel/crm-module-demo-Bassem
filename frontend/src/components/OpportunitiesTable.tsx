@@ -13,12 +13,12 @@ export function OpportunitiesTable({
       <table className="min-w-full divide-y divide-zinc-200 text-sm">
         <thead className="bg-zinc-50 text-left text-xs font-semibold uppercase tracking-wide text-zinc-500">
           <tr>
-            <th className="px-4 py-3">Opportunity</th>
+            <th className="px-4 py-3">Opportunité</th>
             <th className="px-4 py-3">Client</th>
-            <th className="px-4 py-3">Stage</th>
-            <th className="px-4 py-3 text-right">Amount</th>
-            <th className="px-4 py-3">Close date</th>
-            <th className="px-4 py-3">Status</th>
+            <th className="px-4 py-3">Étape</th>
+            <th className="px-4 py-3 text-right">Montant</th>
+            <th className="px-4 py-3">Date de signature</th>
+            <th className="px-4 py-3">Statut</th>
           </tr>
         </thead>
         <tbody className="divide-y divide-zinc-100">

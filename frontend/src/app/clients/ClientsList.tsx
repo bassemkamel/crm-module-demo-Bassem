@@ -42,7 +42,7 @@ export function ClientsList() {
   const onDelete = async (client: Client) => {
     if (
       !window.confirm(
-        `Delete "${client.displayName}" and all of their opportunities? This cannot be undone.`,
+        `Supprimer « ${client.displayName} » et toutes ses opportunités ? Cette action est irréversible.`,
       )
     ) {
       return;
@@ -68,7 +68,7 @@ export function ClientsList() {
             href="/clients/new"
             className="rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-medium text-white shadow-sm transition-colors hover:bg-indigo-700"
           >
-            + New
+            + Nouveau
           </Link>
         </div>
         <label className="flex items-center gap-2 text-sm text-zinc-600">
@@ -78,7 +78,7 @@ export function ClientsList() {
             value={typeFilter}
             onChange={(e) => setTypeFilter(e.target.value as ClientType | "")}
           >
-            <option value="">All</option>
+            <option value="">Tous</option>
             {Object.values(ClientType).map((t) => (
               <option key={t} value={t}>
                 {CLIENT_TYPE_LABELS[t]}
@@ -96,16 +96,16 @@ export function ClientsList() {
       )}
       {state.status === "success" &&
         (state.data.length === 0 ? (
-          <EmptyState message="No clients yet. Create your first one." />
+          <EmptyState message="Aucun client pour le moment. Créez le premier." />
         ) : (
           <div className="overflow-hidden rounded-xl border border-zinc-200 bg-white">
             <table className="min-w-full divide-y divide-zinc-200 text-sm">
               <thead className="bg-zinc-50 text-left text-xs font-semibold uppercase tracking-wide text-zinc-500">
                 <tr>
-                  <th className="px-4 py-3">Name</th>
+                  <th className="px-4 py-3">Nom</th>
                   <th className="px-4 py-3">Type</th>
-                  <th className="px-4 py-3">Email</th>
-                  <th className="px-4 py-3">Phone</th>
+                  <th className="px-4 py-3">E-mail</th>
+                  <th className="px-4 py-3">Téléphone</th>
                   <th className="px-4 py-3 text-right">Actions</th>
                 </tr>
               </thead>
@@ -129,7 +129,7 @@ export function ClientsList() {
                         href={`/clients/${client.id}/edit`}
                         className="font-medium text-indigo-700 hover:underline"
                       >
-                        Edit
+                        Modifier
                       </Link>
                       <button
                         type="button"
@@ -137,7 +137,7 @@ export function ClientsList() {
                         disabled={deletingId === client.id}
                         className="ml-4 font-medium text-red-600 hover:text-red-700 disabled:opacity-50"
                       >
-                        {deletingId === client.id ? "Deleting…" : "Delete"}
+                        {deletingId === client.id ? "Suppression…" : "Supprimer"}
                       </button>
                     </td>
                   </tr>
@@ -153,5 +153,5 @@ export function ClientsList() {
 function toMessage(err: unknown): string {
   if (err instanceof ApiError) return err.message;
   if (err instanceof Error) return err.message;
-  return "Unexpected error";
+  return "Erreur inattendue";
 }
