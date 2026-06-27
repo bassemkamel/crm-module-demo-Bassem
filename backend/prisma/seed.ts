@@ -1,4 +1,5 @@
 import { ClientType, PipelineStage, PrismaClient } from '@prisma/client';
+import * as bcrypt from 'bcrypt';
 
 const prisma = new PrismaClient();
 
@@ -8,7 +9,25 @@ function daysFromNow(days: number): Date {
   return new Date(Date.now() + days * DAY_MS);
 }
 
+// Seeds the admin login. Idempotent (upsert) and independent of the demo data
+// guard below, so the account always exists. Does not overwrite an existing
+// user's password on subsequent runs.
+async function seedAdminUser(): Promise<void> {
+  const email = process.env.ADMIN_EMAIL ?? 'admin@crm.local';
+  const password = process.env.ADMIN_PASSWORD ?? 'admin1234';
+  const passwordHash = await bcrypt.hash(password, 10);
+
+  await prisma.user.upsert({
+    where: { email },
+    update: {},
+    create: { email, passwordHash, name: 'Admin' },
+  });
+  console.log(`[seed] admin user ready: ${email}`);
+}
+
 async function main(): Promise<void> {
+  await seedAdminUser();
+
   const existing = await prisma.client.count();
   if (existing > 0) {
     console.log(`[seed] ${existing} clients already present, skipping seed.`);

@@ -84,6 +84,17 @@ export interface PipelineSummary {
   byStage: StageBreakdown[];
 }
 
+export interface AuthUser {
+  id: string;
+  email: string;
+  name: string | null;
+}
+
+export interface LoginResult {
+  accessToken: string;
+  user: AuthUser;
+}
+
 export interface OpportunityFilters {
   stage?: PipelineStage;
   clientType?: ClientType;

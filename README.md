@@ -64,8 +64,23 @@ Stop with `docker compose down` (add `-v` to also drop the database volume).
 > brand-new file occasionally isn't picked up by hot-reload. If a newly added
 > route 404s, `docker compose restart backend` (or `frontend`) forces a recompile.
 
+## Authentication
+
+The app is protected by JWT auth. A single admin user is seeded on startup:
+
+| Email             | Password    |
+| ----------------- | ----------- |
+| `admin@crm.local` | `admin1234` |
+
+Sign in at `http://localhost:3000/login`. Override the credentials/secret via
+`ADMIN_EMAIL`, `ADMIN_PASSWORD`, `JWT_SECRET`, `JWT_EXPIRES_IN` (see
+`.env.example`). In Swagger, click **Authorize** and paste the token from
+`POST /api/auth/login`.
+
 ## Features
 
+- **Auth** — JWT login; every API route is protected and the frontend is gated
+  behind a login page (seeded admin account, no public sign-up).
 - **Clients** — manage companies and individuals (different required fields per
   type), with list/create/edit/delete.
 - **Opportunities** — full CRUD with validation, list with **server-side

@@ -27,6 +27,8 @@ async function bootstrap() {
       'REST API for managing clients (companies / individuals) and their sales opportunities.',
     )
     .setVersion('1.0')
+    .addBearerAuth()
+    .addTag('auth', 'Authentication (login)')
     .addTag('clients', 'Manage clients (companies and individuals)')
     .addTag('opportunities', 'Manage sales opportunities and the pipeline')
     .build();

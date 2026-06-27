@@ -42,6 +42,10 @@ services:
       DATABASE_URL: postgresql://${POSTGRES_USER:-crm}:${POSTGRES_PASSWORD:-crm}@db:5432/${POSTGRES_DB:-crm}?schema=public
       PORT: 3001
       STAGNANT_THRESHOLD_DAYS: ${STAGNANT_THRESHOLD_DAYS:-14}
+      JWT_SECRET: ${JWT_SECRET:-dev-insecure-secret-change-me}
+      JWT_EXPIRES_IN: ${JWT_EXPIRES_IN:-1d}
+      ADMIN_EMAIL: ${ADMIN_EMAIL:-admin@crm.local}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD:-admin1234}
     ports:
       - "${BACKEND_PORT:-3001}:3001"
     depends_on:

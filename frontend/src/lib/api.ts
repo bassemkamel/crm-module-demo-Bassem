@@ -1,12 +1,29 @@
 import type {
+  AuthUser,
   Client,
   ClientType,
+  LoginResult,
   Opportunity,
   OpportunityFilters,
   Paginated,
   PipelineStage,
   PipelineSummary,
 } from "./types";
+
+const TOKEN_KEY = "crm_token";
+/** Event dispatched when the API rejects a request as unauthorized (401). */
+export const UNAUTHORIZED_EVENT = "crm:unauthorized";
+
+export function getToken(): string | null {
+  if (typeof window === "undefined") return null;
+  return window.localStorage.getItem(TOKEN_KEY);
+}
+
+export function setToken(token: string | null): void {
+  if (typeof window === "undefined") return;
+  if (token) window.localStorage.setItem(TOKEN_KEY, token);
+  else window.localStorage.removeItem(TOKEN_KEY);
+}
 
 /** Payload accepted by the create/update opportunity endpoints. */
 export interface OpportunityInput {
@@ -50,15 +67,29 @@ export class ApiError extends Error {
 }
 
 async function request<T>(path: string, init?: RequestInit): Promise<T> {
+  const token = getToken();
   let res: Response;
   try {
     res = await fetch(`${BASE_URL}${path}`, {
       ...init,
-      headers: { "Content-Type": "application/json", ...init?.headers },
+      headers: {
+        "Content-Type": "application/json",
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        ...init?.headers,
+      },
       cache: "no-store",
     });
   } catch {
     throw new ApiError(0, "Unable to reach the server. Is the API running?");
+  }
+
+  if (res.status === 401) {
+    // Token missing/expired/invalid: drop it and let the app react (log out).
+    setToken(null);
+    if (typeof window !== "undefined") {
+      window.dispatchEvent(new Event(UNAUTHORIZED_EVENT));
+    }
+    throw new ApiError(401, await extractErrorMessage(res));
   }
 
   if (!res.ok) {
@@ -107,6 +138,17 @@ export function getOpportunity(id: string): Promise<Opportunity> {
 
 export function getPipelineSummary(): Promise<PipelineSummary> {
   return request<PipelineSummary>(`/opportunities/pipeline/summary`);
+}
+
+export function login(email: string, password: string): Promise<LoginResult> {
+  return request<LoginResult>(`/auth/login`, {
+    method: "POST",
+    body: JSON.stringify({ email, password }),
+  });
+}
+
+export function getMe(): Promise<AuthUser> {
+  return request<AuthUser>(`/auth/me`);
 }
 
 export function getClients(type?: ClientType): Promise<Client[]> {

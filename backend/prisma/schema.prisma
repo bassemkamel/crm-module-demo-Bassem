@@ -30,6 +30,17 @@ enum PipelineStage {
   LOST
 }
 
+/// An application user who can sign in to the CRM. Authentication only (no
+/// per-user data ownership in this scope); see DECISIONS.md.
+model User {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  passwordHash String
+  name         String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
 /// A client is either a company or an individual (discriminated by `type`).
 /// Type-specific fields are nullable at the DB level and enforced per-type in
 /// the API DTOs (see DECISIONS.md).
