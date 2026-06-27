@@ -94,9 +94,15 @@ function Detail({ opportunity }: { opportunity: Opportunity }) {
             </span>
           </p>
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-3">
           <StageBadge stage={opportunity.stage} />
           <HealthBadge health={opportunity.health} />
+          <Link
+            href={`/opportunities/${opportunity.id}/edit`}
+            className="rounded-md border border-zinc-300 bg-white px-3 py-1.5 text-sm font-medium text-zinc-700 shadow-sm transition-colors hover:bg-zinc-50"
+          >
+            Edit
+          </Link>
         </div>
       </header>
 

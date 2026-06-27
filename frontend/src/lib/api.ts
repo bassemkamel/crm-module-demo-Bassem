@@ -1,9 +1,20 @@
 import type {
+  Client,
   Opportunity,
   OpportunityFilters,
   Paginated,
+  PipelineStage,
   PipelineSummary,
 } from "./types";
+
+/** Payload accepted by the create/update opportunity endpoints. */
+export interface OpportunityInput {
+  title: string;
+  amount: number;
+  expectedCloseDate: string;
+  stage: PipelineStage;
+  clientId: string;
+}
 
 // Browser-facing base URL. Falls back to the docker-mapped backend port so the
 // app works out of the box for local `next dev` too.
@@ -79,4 +90,31 @@ export function getOpportunity(id: string): Promise<Opportunity> {
 
 export function getPipelineSummary(): Promise<PipelineSummary> {
   return request<PipelineSummary>(`/opportunities/pipeline/summary`);
+}
+
+export function getClients(): Promise<Client[]> {
+  return request<Client[]>(`/clients`);
+}
+
+export function createOpportunity(
+  input: OpportunityInput,
+): Promise<Opportunity> {
+  return request<Opportunity>(`/opportunities`, {
+    method: "POST",
+    body: JSON.stringify(input),
+  });
+}
+
+export function updateOpportunity(
+  id: string,
+  input: OpportunityInput,
+): Promise<Opportunity> {
+  return request<Opportunity>(`/opportunities/${id}`, {
+    method: "PATCH",
+    body: JSON.stringify(input),
+  });
+}
+
+export function deleteOpportunity(id: string): Promise<void> {
+  return request<void>(`/opportunities/${id}`, { method: "DELETE" });
 }

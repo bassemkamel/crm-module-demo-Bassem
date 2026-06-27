@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
+import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { ApiError, getOpportunities, getPipelineSummary } from "@/lib/api";
 import type {
@@ -131,7 +132,17 @@ export function OpportunitiesDashboard() {
 
       <section className="space-y-4">
         <div className="flex flex-wrap items-center justify-between gap-3">
-          <h2 className="text-lg font-semibold text-zinc-800">Opportunities</h2>
+          <div className="flex items-center gap-3">
+            <h2 className="text-lg font-semibold text-zinc-800">
+              Opportunities
+            </h2>
+            <Link
+              href="/opportunities/new"
+              className="rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-medium text-white shadow-sm transition-colors hover:bg-indigo-700"
+            >
+              + New
+            </Link>
+          </div>
           <OpportunityFilters
             filters={filters}
             onChange={onFilterChange}

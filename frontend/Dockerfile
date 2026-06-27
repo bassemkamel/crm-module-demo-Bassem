@@ -6,7 +6,10 @@ FROM node:22-alpine
 WORKDIR /app
 
 COPY package*.json ./
-RUN npm ci
+# Use `npm install` rather than `npm ci`: the lockfile may be generated on a
+# different platform (e.g. Windows host) and omit Linux-only optional deps,
+# which makes `npm ci` fail. install resolves the right binaries at build time.
+RUN npm install --no-audit --no-fund
 
 COPY . .
 
